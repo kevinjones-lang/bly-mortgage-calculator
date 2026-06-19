@@ -1,0 +1,14 @@
+{
+  "name": "bly-mortgage-calculator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Bly Team — Mortgage & Closing Calculator",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

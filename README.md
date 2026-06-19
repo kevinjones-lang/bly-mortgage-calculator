@@ -1,22 +1,61 @@
-# CODING AGENTS: READ THIS FIRST
+# The Bly Team — Mortgage & Closing Calculator
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+A free, branded suite of real-estate calculators for The Bly Team (eXp Realty,
+Houston & Gulf Coast): buyer payment/PITI + cash-to-close, seller net proceeds +
+refinance, rent-vs-buy breakeven, and investor cash-flow/ROI.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+Built in React. The original design came from Claude Design as an HTML/JS
+prototype (see [`docs/HANDOFF.md`](docs/HANDOFF.md)); this repo compiles it into a
+**clean, self-contained static site** you can drop onto any website — no build
+server, no CDN dependency, no in-browser transpiler.
 
-## What you should do — IMPORTANT
+## Live build
 
-**Read `functionality-request/project/MortgageCalculator.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+The ready-to-ship site is in [`site/`](site/):
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+```
+site/
+  index.html          # the page
+  vendor.js           # React + ReactDOM (bundled locally)
+  app.js              # calculator engine + UI (JSX precompiled)
+  assets/             # logo
+```
 
-## About the design files
+Open `site/index.html` through any web server to run it. (It must be *served*
+over http, not opened as a `file://` path.)
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+## Build from source
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+Source lives in [`project/app/`](project/app/) (`mortgage.js` is the calc engine;
+the `.jsx` files are the UI). To rebuild `site/`:
 
-## Bundle contents
+```bash
+npm install
+npm run build
+```
 
-- `functionality-request/README.md` — this file
-- `functionality-request/project/` — the `Functionality request` project files (HTML prototypes, assets, components)
+The build (`build.mjs`) precompiles the JSX with esbuild, bundles React locally,
+and writes the static site to `site/`.
+
+## Adding it to your website
+
+Pick whichever fits your site:
+
+1. **Drop-in folder** — copy `site/` into your site (e.g. `/tools/calculator/`)
+   and link to it. Everything is relative, so it just works.
+2. **Embed via iframe** — host `site/` somewhere and embed it on a page:
+   ```html
+   <iframe src="https://YOUR-DOMAIN/tools/calculator/"
+           style="width:100%;height:100vh;border:0" title="Mortgage Calculator">
+   </iframe>
+   ```
+3. **GitHub Pages** — enable Pages on this repo (serving `site/`) for a free
+   hosted URL to link or iframe.
+
+## Notes
+
+- **Fonts** load from Google Fonts (Oswald, Playfair Display, Plus Jakarta Sans)
+  and gracefully fall back to system fonts offline.
+- **AI address estimator** (auto-fill tax rate + insurance from an address) needs
+  a Claude API backend that isn't wired up here, so it degrades to manual entry.
+  This can be connected later via a small serverless proxy.
