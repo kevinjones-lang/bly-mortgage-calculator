@@ -603,16 +603,21 @@ function App() {
 
   async function runEstimate() {
     if (!address.trim()) { setAiState({ status: "err", msg: "Enter an address first." }); return; }
+    // The estimator calls a backend proxy (window.__BLY_AI_ENDPOINT) that holds
+    // the Claude API key server-side. We send only the address; the proxy builds
+    // the prompt and returns structured { taxRate, insurance, area }. If no
+    // endpoint is configured (or the call fails), fall back to manual entry.
+    const endpoint = window.__BLY_AI_ENDPOINT;
+    if (!endpoint) { setAiState({ status: "err", msg: "Auto-estimate isn't set up yet — please enter values manually." }); return; }
     setAiState({ status: "loading", msg: "Looking up local rates…" });
     try {
-      const prompt =
-        "You are a Texas real-estate cost estimator. For this property address, estimate the annual property tax RATE " +
-        "(percent of market value, typical for that county/city incl. ISD + county + MUD where common) and a typical annual " +
-        "homeowners insurance premium in US dollars (account for Gulf Coast windstorm exposure near Galveston/Kemah/Seabrook). " +
-        'Respond with ONLY compact JSON, no prose: {"taxRate": number, "insurance": number, "area": "County, ST"}. Address: ' + address;
-      const raw = await window.claude.complete(prompt);
-      const match = raw.match(/\{[\s\S]*\}/);
-      const data = JSON.parse(match ? match[0] : raw);
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ address: address.trim() }),
+      });
+      if (!res.ok) throw new Error("estimate request failed: " + res.status);
+      const data = await res.json();
       const patch = {};
       if (typeof data.taxRate === "number") patch.taxRate = String(Number(data.taxRate.toFixed(3)));
       if (typeof data.insurance === "number") patch.insurance = String(Math.round(data.insurance));

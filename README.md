@@ -62,6 +62,9 @@ Pick whichever fits your site:
 
 - **Fonts** load from Google Fonts (Oswald, Playfair Display, Plus Jakarta Sans)
   and gracefully fall back to system fonts offline.
-- **AI address estimator** (auto-fill tax rate + insurance from an address) needs
-  a Claude API backend that isn't wired up here, so it degrades to manual entry.
-  This can be connected later via a small serverless proxy.
+- **AI address estimator** (auto-fill tax rate + insurance from an address) is
+  wired up and ready — it just needs a small backend that holds the Claude API
+  key (a public page can't safely hold one). Deploy the Cloudflare Worker in
+  [`proxy/`](proxy/) and rebuild with its URL; see [`proxy/README.md`](proxy/README.md).
+  Until then the estimator gracefully tells users to enter values manually, and
+  everything else works regardless.

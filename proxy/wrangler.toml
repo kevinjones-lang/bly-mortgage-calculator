@@ -1,0 +1,13 @@
+name = "bly-mortgage-estimator"
+main = "src/worker.js"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Origins allowed to call this proxy (comma-separated, no trailing slash).
+# Add your live website's origin here once the calculator is embedded on it.
+[vars]
+ALLOWED_ORIGINS = "https://kevinjones-lang.github.io,http://localhost:4321"
+
+# ANTHROPIC_API_KEY is a SECRET, not a var — set it with:
+#   npx wrangler secret put ANTHROPIC_API_KEY
+# (never put the key in this file)

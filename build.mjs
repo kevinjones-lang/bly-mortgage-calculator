@@ -13,6 +13,11 @@ const APP = path.join(PROJ, "app");
 const OUT = path.join(root, "site");
 const NM = path.join(root, "node_modules");
 
+// URL of the AI-estimator proxy (the Cloudflare Worker). Set it at build time:
+//   BLY_AI_ENDPOINT="https://your-worker.workers.dev" npm run build
+// Left empty, the address estimator gracefully falls back to manual entry.
+const AI_ENDPOINT = process.env.BLY_AI_ENDPOINT || "";
+
 // Same order the prototype loads them in. mortgage.js is plain JS; the rest are JSX.
 const JS_FILES = ["mortgage.js"];
 const JSX_FILES = [
@@ -70,6 +75,7 @@ async function main() {
     `</head>
 <body data-theme="data" style="font-size: 24px">
   <div id="root"></div>
+  <script>window.__BLY_AI_ENDPOINT = ${JSON.stringify(AI_ENDPOINT)};</script>
   <script src="vendor.js"></script>
   <script src="app.js"></script>
 </body>
