@@ -4,10 +4,16 @@ A free, branded suite of real-estate calculators for The Bly Team (eXp Realty,
 Houston & Gulf Coast): buyer payment/PITI + cash-to-close, seller net proceeds +
 refinance, rent-vs-buy breakeven, and investor cash-flow/ROI.
 
+**Live:** https://kevinjones-lang.github.io/bly-mortgage-calculator/
+
 Built in React. The original design came from Claude Design as an HTML/JS
 prototype (see [`docs/HANDOFF.md`](docs/HANDOFF.md)); this repo compiles it into a
 **clean, self-contained static site** you can drop onto any website — no build
 server, no CDN dependency, no in-browser transpiler.
+
+The live link above is published by GitHub Pages from the `gh-pages` branch
+(which holds the contents of `site/` at its root). To update it after a rebuild,
+copy the new `site/` contents onto the `gh-pages` branch and push.
 
 ## Live build
 
